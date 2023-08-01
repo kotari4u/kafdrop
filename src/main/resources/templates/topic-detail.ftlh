@@ -44,11 +44,6 @@
     <a id="topic-messages" class="btn btn-outline-light" href="<@spring.url '/topic/${topic.name}/messages'/>">
         <i class="fa fa-eye"></i> View Messages
     </a>
-    <#if topicDeleteEnabled>
-        <form id="delete-topic-form" action="<@spring.url '/topic/${topic.name}/delete'/>" method="POST">
-            <button class="btn btn-danger" type="submit"><i class="fa fa-remove"></i> Delete topic</button>
-        </form>
-    </#if>
 </div>
 <br/>
 <div class="container-fluid pl-0">

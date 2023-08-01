@@ -22,7 +22,6 @@ import kafdrop.model.AclVO;
 import kafdrop.model.BrokerVO;
 import kafdrop.model.ClusterSummaryVO;
 import kafdrop.model.ConsumerVO;
-import kafdrop.model.CreateTopicVO;
 import kafdrop.model.MessageVO;
 import kafdrop.model.TopicVO;
 import kafdrop.util.Deserializers;
@@ -55,20 +54,6 @@ public interface KafkaMonitor {
   List<ConsumerVO> getConsumersByGroup(String groupId);
 
   List<ConsumerVO> getConsumersByTopics(Collection<TopicVO> topicVos);
-
-  /**
-   * Create topic
-   *
-   * @param createTopicDto topic params
-   */
-  void createTopic(CreateTopicVO createTopicDto);
-
-  /**
-   * Delete the given topic
-   *
-   * @param topic name of the topic to delete
-   */
-  void deleteTopic(String topic);
 
   List<AclVO> getAcls();
 }

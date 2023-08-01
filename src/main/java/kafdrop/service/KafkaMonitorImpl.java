@@ -24,13 +24,11 @@ import kafdrop.model.ClusterSummaryVO;
 import kafdrop.model.ConsumerPartitionVO;
 import kafdrop.model.ConsumerTopicVO;
 import kafdrop.model.ConsumerVO;
-import kafdrop.model.CreateTopicVO;
 import kafdrop.model.MessageVO;
 import kafdrop.model.TopicPartitionVO;
 import kafdrop.model.TopicVO;
 import kafdrop.util.Deserializers;
 import org.apache.kafka.clients.admin.ConfigEntry.ConfigSource;
-import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.consumer.OffsetAndMetadata;
 import org.apache.kafka.common.PartitionInfo;
 import org.apache.kafka.common.TopicPartition;
@@ -245,19 +243,6 @@ public final class KafkaMonitorImpl implements KafkaMonitor {
     LOG.debug("consumerGroupOffsets: {}", consumerGroupOffsets);
     LOG.debug("topicVos: {}", topicVos);
     return convert(consumerGroupOffsets, topicVos);
-  }
-
-  @Override
-  public void createTopic(CreateTopicVO createTopicDto) {
-    var newTopic = new NewTopic(
-      createTopicDto.getName(), createTopicDto.getPartitionsNumber(), (short) createTopicDto.getReplicationFactor()
-    );
-    highLevelAdminClient.createTopic(newTopic);
-  }
-
-  @Override
-  public void deleteTopic(String topic) {
-    highLevelAdminClient.deleteTopic(topic);
   }
 
   @Override

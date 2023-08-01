@@ -24,7 +24,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kafdrop.config.MessageFormatConfiguration;
 import kafdrop.model.ConsumerVO;
-import kafdrop.model.CreateTopicVO;
 import kafdrop.model.TopicVO;
 import kafdrop.service.KafkaMonitor;
 import kafdrop.service.TopicNotFoundException;
@@ -35,7 +34,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -80,34 +78,6 @@ public final class TopicController {
     return "topic-detail";
   }
 
-  @PostMapping(value = "/{name:.+}/delete")
-  public String deleteTopic(@PathVariable("name") String topicName, Model model) {
-    if (!topicDeleteEnabled) {
-      model.addAttribute("deleteErrorMessage", "Not configured to be deleted.");
-      return topicDetails(topicName, model);
-    }
-
-    try {
-      kafkaMonitor.deleteTopic(topicName);
-      return "redirect:/";
-    } catch (Exception ex) {
-      model.addAttribute("deleteErrorMessage", ex.getMessage());
-      return topicDetails(topicName, model);
-    }
-  }
-
-  /**
-   * Topic create page
-   *
-   * @param model
-   * @return creation page
-   */
-  @RequestMapping("/create")
-  public String createTopicPage(Model model) {
-    model.addAttribute("topicCreateEnabled", topicCreateEnabled);
-    model.addAttribute("brokersCount", kafkaMonitor.getBrokers().size());
-    return "topic-create";
-  }
 
   @Operation(summary = "getTopic", description = "Get details for a topic")
   @ApiResponses(value = {
@@ -144,22 +114,4 @@ public final class TopicController {
    *
    * @param createTopicVO request
    */
-  @Operation(summary = "createTopic", description = "Create topic")
-  @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Success")})
-  @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-  public String createTopic(CreateTopicVO createTopicVO, Model model) {
-    model.addAttribute("topicCreateEnabled", topicCreateEnabled);
-    model.addAttribute("topicName", createTopicVO.getName());
-    if (!topicCreateEnabled) {
-      model.addAttribute("errorMessage", "Not configured to be created.");
-      return createTopicPage(model);
-    }
-    try {
-      kafkaMonitor.createTopic(createTopicVO);
-    } catch (Exception ex) {
-      model.addAttribute("errorMessage", ex.getMessage());
-    }
-    model.addAttribute("brokersCount", kafkaMonitor.getBrokers().size());
-    return "topic-create";
-  }
 }

@@ -149,11 +149,6 @@
             </#list>
             </tbody>
         </table>
-        <#if topicCreateEnabled>
-            <a class="btn btn-outline-light" href="<@spring.url '/topic/create'/>">
-                <i class="fa fa-plus"></i> New
-            </a>
-        </#if>
     </div>
 </div>
 

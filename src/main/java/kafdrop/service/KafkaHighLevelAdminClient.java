@@ -5,7 +5,6 @@ import kafdrop.config.KafkaConfiguration;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.Config;
 import org.apache.kafka.clients.admin.ConsumerGroupListing;
-import org.apache.kafka.clients.admin.DeleteTopicsOptions;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.OffsetAndMetadata;
@@ -144,25 +143,6 @@ public final class KafkaHighLevelAdminClient {
       LOG.info("Topic {} successfully created", newTopic.name());
     } catch (InterruptedException | ExecutionException e) {
       LOG.error("Error while creating topic", e);
-      throw new KafkaAdminClientException(e);
-    }
-  }
-
-  /**
-   * Delete topic or throw ${@code KafkaAdminClientException}
-   *
-   * @param topic name of the topic to delete
-   * @throws KafkaAdminClientException if computation threw an Exception
-   */
-  void deleteTopic(String topic) {
-    DeleteTopicsOptions options = new DeleteTopicsOptions();
-    options.timeoutMs(5000); // timeout after 5 seconds
-    final var deleteTopicsResult = adminClient.deleteTopics(List.of(topic), options);
-    try {
-      deleteTopicsResult.all().get();
-      LOG.info("Topic {} successfully deleted", topic);
-    } catch (InterruptedException | ExecutionException e) {
-      LOG.error("Error while deleting topic", e);
       throw new KafkaAdminClientException(e);
     }
   }
